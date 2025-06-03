@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import { UserOutlined, MailOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/AuthContext';
