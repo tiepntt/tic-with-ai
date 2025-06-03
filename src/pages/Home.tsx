@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Typography, Card, Avatar, Divider } from 'antd';
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import EditProfileModal from '../components/EditProfileModal';
 
 const { Title, Text } = Typography;
 
 const Home: React.FC = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -54,13 +56,16 @@ const Home: React.FC = () => {
               <Title level={4} className="mb-4">Account Information</Title>
               <div className="space-y-2">
                 <div>
+                  <Text strong>Full Name:</Text> <Text>{user?.user_metadata?.full_name || 'Not set'}</Text>
+                </div>
+                <div>
+                  <Text strong>Username:</Text> <Text>{user?.user_metadata?.username || 'Not set'}</Text>
+                </div>
+                <div>
                   <Text strong>Email:</Text> <Text>{user?.email}</Text>
                 </div>
                 <div>
-                  <Text strong>ID:</Text> <Text>{user?.id?.substring(0, 8)}...</Text>
-                </div>
-                <div>
-                  <Text strong>Last Sign In:</Text> <Text>{new Date(user?.last_sign_in_at || '').toLocaleString()}</Text>
+                  <Text strong>Website:</Text> <Text>{user?.user_metadata?.website || 'Not set'}</Text>
                 </div>
               </div>
             </div>
@@ -70,7 +75,7 @@ const Home: React.FC = () => {
             <div className="p-6">
               <Title level={4} className="mb-4">Quick Actions</Title>
               <div className="space-y-4">
-                <Button block>Edit Profile</Button>
+                <Button block onClick={() => setIsEditModalOpen(true)}>Edit Profile</Button>
                 <Button block>Change Password</Button>
                 <Button block>Notification Settings</Button>
               </div>
@@ -98,6 +103,11 @@ const Home: React.FC = () => {
           </div>
         </Card>
       </div>
+
+      <EditProfileModal
+        open={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+      />
     </div>
   );
 };
